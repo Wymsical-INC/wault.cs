@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wault.CS", "src\Wault.CS\Wault.CS.csproj", "{B89DD0A3-2426-4A09-90E2-B5A64F859C75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7A9F3FE2-6C4E-43F3-9AA5-2AC450F8D26D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{72F0D318-19C0-40D4-ADAA-102CC6FB9802}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B89DD0A3-2426-4A09-90E2-B5A64F859C75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B89DD0A3-2426-4A09-90E2-B5A64F859C75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B89DD0A3-2426-4A09-90E2-B5A64F859C75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B89DD0A3-2426-4A09-90E2-B5A64F859C75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B89DD0A3-2426-4A09-90E2-B5A64F859C75} = {7A9F3FE2-6C4E-43F3-9AA5-2AC450F8D26D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C19A467-6687-4624-95F5-FF8B0BB8B66E}
+	EndGlobalSection
+EndGlobal
