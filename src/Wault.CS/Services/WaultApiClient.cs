@@ -75,10 +75,17 @@ namespace Wault.CS.Services
                 }
             }
 
-            using var response = await _httpClient.PostAsync(uriBuilder.Uri, content, cancellationToken).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseString = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            return JsonSerializer.Deserialize<DocumentCreateResult>(responseString);
+            try
+            {
+                using var response = await _httpClient.PostAsync(uriBuilder.Uri, content, cancellationToken).ConfigureAwait(false);
+                response.EnsureSuccessStatusCode();
+                var responseString = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+                return JsonSerializer.Deserialize<DocumentCreateResult>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw new WaultRequestFailedException(uriBuilder.Uri.AbsoluteUri, innerException: ex);
+            }
         }
 
         public async Task<PackageCreateResult> CreatePackageAsync(string name, CancellationToken cancellationToken = default)
