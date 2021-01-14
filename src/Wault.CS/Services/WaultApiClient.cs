@@ -234,7 +234,7 @@ namespace Wault.CS.Services
                 }
 
                 _accessToken = tokenResponse.AccessToken;
-                _expiresAt = DateTime.UtcNow.AddSeconds(tokenResponse.ExpiresIn);
+                _expiresAt = DateTime.UtcNow.AddSeconds(60);
             }
 
             _httpClient.SetBearerToken(_accessToken);
