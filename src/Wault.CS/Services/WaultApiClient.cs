@@ -53,7 +53,7 @@ namespace Wault.CS.Services
             var uriBuilder = new UriBuilder($"{_options.ApiUrl}api/documents");
 
             using var nameContent = new StringContent(name);
-            using var resultTypeContent = new StringContent(nameof(resultType));
+            using var resultTypeContent = new StringContent(resultType.ToString());
             using var fileContent = new ByteArrayContent(fileBytes);
             fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
 
