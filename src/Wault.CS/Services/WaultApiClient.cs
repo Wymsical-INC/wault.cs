@@ -19,10 +19,10 @@ namespace Wault.CS.Services
 {
     public class WaultApiClient : IWaultApiClient
     {
-        private static string _accessToken;
-        private static DateTime _expiresAt;
         private readonly HttpClient _httpClient;
         private readonly WaultConfigs _options;
+        private string _accessToken;
+        private DateTime _expiresAt = DateTime.MinValue;
 
         public WaultApiClient(HttpClient httpClient, IOptions<WaultConfigs> options)
         {
@@ -48,7 +48,7 @@ namespace Wault.CS.Services
             await PostJsonAsync(url, data, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<DocumentCreateResult> CreateDocumentAsync(byte[] fileBytes, string fileName, string name, string[] signatureAccessTokens, DocumentCreationResultType resultType=DocumentCreationResultType.Id, CancellationToken cancellationToken = default)
+        public async Task<DocumentCreateResult> CreateDocumentAsync(byte[] fileBytes, string fileName, string name, string[] signatureAccessTokens, DocumentCreationResultType resultType = DocumentCreationResultType.Id, CancellationToken cancellationToken = default)
         {
             await AuthorizeAsync(cancellationToken).ConfigureAwait(false);
 
