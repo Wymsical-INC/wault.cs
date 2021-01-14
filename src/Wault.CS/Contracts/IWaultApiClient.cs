@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Wault.CS.Constants;
 using Wault.CS.Models;
 
 namespace Wault.CS.Contracts
@@ -10,7 +11,7 @@ namespace Wault.CS.Contracts
     {
         Task AddPackageDocumentAsync(Guid packageId, Guid[] documentIds, CancellationToken cancellationToken = default);
 
-        Task<DocumentCreateResult> CreateDocumentAsync(byte[] file, string fileName, string name, string[] signatureAccessTokens, CancellationToken cancellationToken = default);
+        Task<DocumentCreateResult> CreateDocumentAsync(byte[] file, string fileName, string name, string[] signatureAccessTokens, DocumentCreationResultType resultType = DocumentCreationResultType.Id, CancellationToken cancellationToken = default);
 
         Task<PackageCreateResult> CreatePackageAsync(string name, CancellationToken cancellationToken = default);
 

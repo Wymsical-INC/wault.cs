@@ -6,6 +6,6 @@ namespace Wault.CS.Models
     public class DocumentCreateResult
     {
         [JsonPropertyName("id")]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using IdentityModel.Client;
 using Microsoft.Extensions.Options;
+using Wault.CS.Constants;
 using Wault.CS.Contracts;
 using Wault.CS.Exceptions;
 using Wault.CS.Models;
@@ -47,21 +48,22 @@ namespace Wault.CS.Services
             await PostJsonAsync(url, data, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<DocumentCreateResult> CreateDocumentAsync(byte[] fileBytes, string fileName, string name, string[] signatureAccessTokens, CancellationToken cancellationToken = default)
+        public async Task<DocumentCreateResult> CreateDocumentAsync(byte[] fileBytes, string fileName, string name, string[] signatureAccessTokens, DocumentCreationResultType resultType=DocumentCreationResultType.Id, CancellationToken cancellationToken = default)
         {
             await AuthorizeAsync(cancellationToken).ConfigureAwait(false);
 
             var uriBuilder = new UriBuilder($"{_options.ApiUrl}api/documents");
 
             using var nameContent = new StringContent(name);
-
+            using var resultTypeContent = new StringContent(nameof(resultType));
             using var fileContent = new ByteArrayContent(fileBytes);
             fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
 
             using var content = new MultipartFormDataContent
             {
                 { nameContent, "name" },
-                { fileContent, "files", fileName }
+                { fileContent, "files", fileName },
+                { resultTypeContent, "resultType" }
             };
 
             if (signatureAccessTokens != null)
