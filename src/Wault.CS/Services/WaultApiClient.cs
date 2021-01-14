@@ -21,8 +21,6 @@ namespace Wault.CS.Services
     {
         private readonly HttpClient _httpClient;
         private readonly WaultConfigs _options;
-        private string _accessToken;
-        private DateTime _expiresAt = DateTime.MinValue;
 
         public WaultApiClient(HttpClient httpClient, IOptions<WaultConfigs> options)
         {
@@ -205,41 +203,37 @@ namespace Wault.CS.Services
 
         private async Task AuthorizeAsync(CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrEmpty(_accessToken) || _expiresAt < DateTime.UtcNow)
+            var disco = await _httpClient
+                .GetDiscoveryDocumentAsync(_options.Authority, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+
+            if (disco.IsError)
             {
-                var disco = await _httpClient
-                    .GetDiscoveryDocumentAsync(_options.Authority, cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
-
-                if (disco.IsError)
-                {
-                    throw new DiscoveryDocumentFailedException(_options.Authority);
-                }
-
-                using var tokenRequest = new ClientCredentialsTokenRequest
-                {
-                    Address = disco.TokenEndpoint,
-                    ClientId = _options.ClientId,
-                    ClientSecret = _options.ClientSecret,
-                    Scope = "memberships identityserver identityapi coreapi filestorage notifications pointsapi plaidImportApi"
-                };
-
-                tokenRequest.Parameters.Add("deviceId", _options.DeviceId);
-
-                var tokenResponse = await _httpClient
-                    .RequestClientCredentialsTokenAsync(tokenRequest, cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
-
-                if (tokenResponse.IsError)
-                {
-                    throw new TokenFailedException(tokenResponse.Error);
-                }
-
-                _accessToken = tokenResponse.AccessToken;
-                _expiresAt = DateTime.UtcNow.AddSeconds(60);
+                throw new DiscoveryDocumentFailedException(_options.Authority);
             }
 
-            _httpClient.SetBearerToken(_accessToken);
+            using var tokenRequest = new ClientCredentialsTokenRequest
+            {
+                Address = disco.TokenEndpoint,
+                ClientId = _options.ClientId,
+                ClientSecret = _options.ClientSecret,
+                Scope = "memberships identityserver identityapi coreapi filestorage notifications pointsapi plaidImportApi"
+            };
+
+            tokenRequest.Parameters.Add("deviceId", _options.DeviceId);
+
+            var tokenResponse = await _httpClient
+                .RequestClientCredentialsTokenAsync(tokenRequest, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+
+            if (tokenResponse.IsError)
+            {
+                throw new TokenFailedException(tokenResponse.Error);
+            }
+
+            var accessToken = tokenResponse.AccessToken;
+
+            _httpClient.SetBearerToken(accessToken);
 
             if (!_httpClient.DefaultRequestHeaders.Contains("deviceId"))
             {
